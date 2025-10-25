@@ -30,6 +30,18 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}
+GRAPHENE = {
+    'SCHEMA': 'api.schema.schema',  # Chemin vers mon schéma GraphQL
+}
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,7 +54,12 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'api.apps.ApiConfig',
     'visualisation.apps.VisualisationConfig',
-    'core.apps.CoreConfig'
+    'core.apps.CoreConfig',
+
+    # Dépendances du projet
+    'rest_framework',
+    'drf_yasg',
+    'graphene_django',
 
 
 
