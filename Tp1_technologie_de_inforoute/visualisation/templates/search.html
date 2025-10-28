@@ -1,0 +1,26 @@
+<h2>Recherche de jeux de données</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Rechercher</button>
+</form>
+
+
+
+{% if datasets %}
+  <h3>Résultats :</h3>
+  <ul>
+    {% for ds in datasets %}
+      <li>
+        <strong>{{ ds.title }}</strong> — {{ ds.notes|truncatechars:120 }}
+        <br>
+        <small>Organisation : {{ ds.organization_title }}</small>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
