@@ -17,17 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from TP1_Inforoute.views import DatasetViewSet
+from TP1_Inforoute.views import DatasetViewSet,ResourceViewSet
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from graphene_django.views import GraphQLView
+from django.views.decorators.csrf import csrf_exempt
+from TP1_Inforoute import views
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
+router.register(r'resources', ResourceViewSet, basename='resource')
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="OGSL API",
+        title="Inforoute API",
         default_version='v1',
         description="API REST - données moissonnées depuis Données Québec",
         contact=openapi.Contact(email="contact@ogsl.ca"),
@@ -40,4 +44,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('stats/', views.stats_view, name='stats_view'),
+    path('', views.dataset_list, name='dataset_list'),
+    path('dataset/<str:ckan_id>/', views.dataset_detail, name='dataset_detail'),
 ]
